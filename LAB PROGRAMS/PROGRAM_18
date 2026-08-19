@@ -1,0 +1,33 @@
+print("DES SUBKEY GENERATION")
+print("---------------------")
+
+key = input("Enter 56-bit initial key: ")
+
+if len(key) != 56 or any(ch not in "01" for ch in key):
+    print("Invalid key.")
+    print("Enter exactly 56 binary bits.")
+else:
+    left = key[:28]
+    right = key[28:]
+
+    shifts = [1, 1, 2, 2, 2, 2, 2, 2,
+              1, 2, 2, 2, 2, 2, 2, 1]
+
+    print()
+    print("Left 28-bit part :", left)
+    print("Right 28-bit part:", right)
+
+    print()
+    print("Generated Subkeys:")
+
+    for round_no in range(16):
+        shift = shifts[round_no]
+
+        left = left[shift:] + left[:shift]
+        right = right[shift:] + right[:shift]
+
+        combined = left + right
+
+        subkey = combined[:24] + combined[28:52]
+
+        print("K" + str(round_no + 1) + ":", subkey)
