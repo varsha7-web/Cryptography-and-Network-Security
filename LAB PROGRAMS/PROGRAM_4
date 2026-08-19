@@ -1,0 +1,31 @@
+print("POLYALPHABETIC SUBSTITUTION CIPHER")
+print("-----------------------------------")
+
+plaintext = input("Enter plaintext: ")
+key = input("Enter key: ").upper()
+
+ciphertext = ""
+key_index = 0
+
+for ch in plaintext:
+
+    if ch.isalpha():
+
+        p = ord(ch.upper()) - ord('A')
+        k = ord(key[key_index % len(key)]) - ord('A')
+
+        c = (p + k) % 26
+
+        if ch.isupper():
+            ciphertext += chr(c + ord('A'))
+        else:
+            ciphertext += chr(c + ord('a'))
+
+        key_index += 1
+
+    else:
+        ciphertext += ch
+
+print("Plaintext :", plaintext)
+print("Key       :", key)
+print("Ciphertext:", ciphertext)
