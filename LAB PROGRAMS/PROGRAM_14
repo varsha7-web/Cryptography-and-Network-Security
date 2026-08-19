@@ -1,0 +1,41 @@
+print("ONE-TIME PAD VIGENERE CIPHER")
+print("----------------------------")
+
+plaintext = "SENDMOREMONEY"
+
+key = [9, 0, 1, 7, 23, 15, 21, 14, 11, 11, 2, 8, 9]
+
+ciphertext = ""
+
+for i in range(len(plaintext)):
+    p = ord(plaintext[i]) - ord('A')
+    c = (p + key[i]) % 26
+    ciphertext += chr(c + ord('A'))
+
+print("Plaintext :", plaintext)
+print("Key       :", key)
+print("Ciphertext:", ciphertext)
+
+new_plaintext = "CASHNOTNEEDED"
+
+new_key = []
+
+for i in range(len(new_plaintext)):
+    c = ord(ciphertext[i]) - ord('A')
+    p = ord(new_plaintext[i]) - ord('A')
+
+    k = (c - p) % 26
+    new_key.append(k)
+
+print()
+print("Required Plaintext :", new_plaintext)
+print("New Key Stream     :", new_key)
+
+check = ""
+
+for i in range(len(new_plaintext)):
+    p = ord(new_plaintext[i]) - ord('A')
+    c = (p + new_key[i]) % 26
+    check += chr(c + ord('A'))
+
+print("Resulting Ciphertext:", check)
