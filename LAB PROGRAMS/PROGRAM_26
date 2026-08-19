@@ -1,0 +1,64 @@
+print("RSA KEY REGENERATION")
+print("--------------------")
+
+p = int(input("Enter first prime number p: "))
+q = int(input("Enter second prime number q: "))
+
+n = p * q
+phi = (p - 1) * (q - 1)
+
+print()
+print("Original modulus n =", n)
+print("Phi(n) =", phi)
+
+e = int(input("Enter original public key e: "))
+
+def gcd(a, b):
+    while b != 0:
+        a, b = b, a % b
+    return a
+
+def inverse(e, phi):
+    for d in range(1, phi):
+        if (e * d) % phi == 1:
+            return d
+    return -1
+
+d = inverse(e, phi)
+
+print()
+print("Original Public Key  :", (e, n))
+print("Original Private Key :", (d, n))
+
+print()
+print("Bob's private key has been leaked.")
+
+print()
+print("A new modulus must be generated.")
+print("Enter new prime numbers.")
+
+p2 = int(input("Enter new prime p: "))
+q2 = int(input("Enter new prime q: "))
+
+n2 = p2 * q2
+phi2 = (p2 - 1) * (q2 - 1)
+
+e2 = 3
+
+while gcd(e2, phi2) != 1:
+    e2 += 2
+
+d2 = inverse(e2, phi2)
+
+print()
+print("New Public Key  :", (e2, n2))
+print("New Private Key :", (d2, n2))
+
+if n2 != n:
+    print()
+    print("New modulus generated successfully.")
+    print("The new key pair is safe from the old leaked private key.")
+else:
+    print()
+    print("The modulus was not changed.")
+    print("Generating only new e and d is NOT sufficient.")
