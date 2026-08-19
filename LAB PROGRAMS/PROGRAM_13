@@ -1,0 +1,45 @@
+print("HILL CIPHER - KNOWN PLAINTEXT ATTACK")
+print("-------------------------------------")
+
+p1 = input("Enter plaintext block 1: ").upper()
+p2 = input("Enter plaintext block 2: ").upper()
+
+c1 = input("Enter ciphertext block 1: ").upper()
+c2 = input("Enter ciphertext block 2: ").upper()
+
+a = ord(p1[0]) - 65
+b = ord(p1[1]) - 65
+c = ord(p2[0]) - 65
+d = ord(p2[1]) - 65
+
+x = ord(c1[0]) - 65
+y = ord(c1[1]) - 65
+z = ord(c2[0]) - 65
+w = ord(c2[1]) - 65
+
+det = (a * d - b * c) % 26
+
+inverse_det = -1
+
+for i in range(26):
+    if (det * i) % 26 == 1:
+        inverse_det = i
+        break
+
+if inverse_det == -1:
+    print("Plaintext matrix has no inverse modulo 26.")
+else:
+    inv = [
+        [(d * inverse_det) % 26, (-b * inverse_det) % 26],
+        [(-c * inverse_det) % 26, (a * inverse_det) % 26]
+    ]
+
+    k11 = (x * inv[0][0] + y * inv[1][0]) % 26
+    k12 = (x * inv[0][1] + y * inv[1][1]) % 26
+    k21 = (z * inv[0][0] + w * inv[1][0]) % 26
+    k22 = (z * inv[0][1] + w * inv[1][1]) % 26
+
+    print()
+    print("Recovered Key Matrix:")
+    print(k11, k12)
+    print(k21, k22)
