@@ -1,0 +1,48 @@
+print("LETTER FREQUENCY ATTACK")
+print("-----------------------")
+
+ciphertext = input("Enter ciphertext: ").upper()
+top = int(input("Enter number of possible plaintexts: "))
+
+frequency = {}
+
+for ch in ciphertext:
+    if ch.isalpha():
+        if ch not in frequency:
+            frequency[ch] = 0
+
+        frequency[ch] += 1
+
+ordered = sorted(
+    frequency,
+    key=frequency.get,
+    reverse=True
+)
+
+english = "ETAOINSHRDLCUMWFGYPBVKJXQZ"
+
+print()
+print("Frequency Table:")
+
+for ch in ordered:
+    print(ch, ":", frequency[ch])
+
+print()
+print("Possible Plaintexts:")
+
+for shift in range(min(top, 26)):
+
+    mapping = {}
+
+    for i in range(len(ordered)):
+        mapping[ordered[i]] = english[(i + shift) % 26]
+
+    plaintext = ""
+
+    for ch in ciphertext:
+        if ch in mapping:
+            plaintext += mapping[ch]
+        else:
+            plaintext += ch
+
+    print(str(shift + 1) + ".", plaintext)
