@@ -1,0 +1,28 @@
+print("SIMPLE SUBSTITUTION CIPHER")
+print("--------------------------")
+
+ciphertext = """53‡‡†305))6*;4826)4‡.)4‡);806*;48†8¶60))85;;]8*;:‡*8†83"""
+
+frequency = {}
+
+for ch in ciphertext:
+    if ch.isalnum() or ch in "‡†*;.)(":
+        if ch in frequency:
+            frequency[ch] += 1
+        else:
+            frequency[ch] = 1
+
+print("Character Frequencies:")
+
+sorted_chars = sorted(frequency, key=frequency.get, reverse=True)
+
+for ch in sorted_chars:
+    print(ch, ":", frequency[ch])
+
+print()
+print("Most frequent characters:")
+print(sorted_chars[:10])
+
+print()
+print("Frequency analysis completed.")
+print("The most frequent symbols are candidates for common English letters.")
