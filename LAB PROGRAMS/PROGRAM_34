@@ -1,0 +1,84 @@
+print("ECB, CBC AND CFB MODES")
+print("----------------------")
+
+plaintext = input("Enter binary plaintext: ")
+key = input("Enter binary key: ")
+iv = input("Enter binary IV: ")
+block_size = int(input("Enter block size: "))
+
+if any(ch not in "01" for ch in plaintext + key + iv):
+    print("Enter binary values only.")
+elif len(key) != block_size or len(iv) != block_size:
+    print("Key and IV must match block size.")
+else:
+
+    padding = block_size - (len(plaintext) % block_size)
+
+    if padding == 0:
+        padding = block_size
+
+    plaintext += "1"
+
+    while len(plaintext) % block_size != 0:
+        plaintext += "0"
+
+    def xor_bits(a, b):
+        result = ""
+
+        for i in range(len(a)):
+            result += str(int(a[i]) ^ int(b[i]))
+
+        return result
+
+    blocks = []
+
+    for i in range(0, len(plaintext), block_size):
+        blocks.append(plaintext[i:i + block_size])
+
+    ecb = []
+
+    for block in blocks:
+        ecb.append(xor_bits(block, key))
+
+    print()
+    print("ECB Ciphertext:")
+
+    for block in ecb:
+        print(block)
+
+    cbc = []
+    previous = iv
+
+    for block in blocks:
+        mixed = xor_bits(block, previous)
+        encrypted = xor_bits(mixed, key)
+
+        cbc.append(encrypted)
+        previous = encrypted
+
+    print()
+    print("CBC Ciphertext:")
+
+    for block in cbc:
+        print(block)
+
+    cfb = []
+    previous = iv
+
+    for block in blocks:
+        stream = xor_bits(previous, key)
+        encrypted = xor_bits(block, stream)
+
+        cfb.append(encrypted)
+        previous = encrypted
+
+    print()
+    print("CFB Ciphertext:")
+
+    for block in cfb:
+        print(block)
+
+    print()
+    print("Padding bits added:", padding)
+    print("Padding ensures that the final block is complete.")
+    print("It also makes the original message length unambiguous.")
