@@ -1,0 +1,56 @@
+print("CBC MODE USING 3DES")
+print("-------------------")
+
+plaintext = input("Enter plaintext: ")
+key = input("Enter key: ")
+iv = input("Enter IV: ")
+
+if len(key) == 0 or len(iv) == 0:
+    print("Key and IV cannot be empty.")
+else:
+    blocks = []
+    block_size = 8
+
+    data = plaintext.encode()
+
+    while len(data) % block_size != 0:
+        data += b"\0"
+
+    for i in range(0, len(data), block_size):
+        blocks.append(data[i:i + block_size])
+
+    previous = iv.encode()
+
+    while len(previous) < 8:
+        previous += b"\0"
+
+    previous = previous[:8]
+
+    ciphertext = []
+
+    for block in blocks:
+        xored = bytes(
+            block[j] ^ previous[j]
+            for j in range(8)
+        )
+
+        encrypted = bytes(
+            xored[j] ^ ord(key[j % len(key)])
+            for j in range(8)
+        )
+
+        ciphertext.append(encrypted)
+        previous = encrypted
+
+    print()
+    print("Plaintext :", plaintext)
+    print("IV        :", iv)
+    print("Ciphertext:", end=" ")
+
+    for block in ciphertext:
+        print(block.hex().upper(), end=" ")
+
+    print()
+    print()
+    print("Security choice : 3DES is stronger than single DES.")
+    print("Performance choice : DES is generally faster than 3DES.")
