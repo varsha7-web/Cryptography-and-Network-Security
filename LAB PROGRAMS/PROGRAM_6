@@ -1,0 +1,27 @@
+import math
+
+print("AFFINE CIPHER ATTACK")
+print("--------------------")
+
+cipher1 = ord('B') - ord('A')
+cipher2 = ord('U') - ord('A')
+
+p1 = ord('E') - ord('A')
+p2 = ord('T') - ord('A')
+
+found = False
+
+for a in range(26):
+    if math.gcd(a, 26) == 1:
+        for b in range(26):
+            if (a * p1 + b) % 26 == cipher1:
+                if (a * p2 + b) % 26 == cipher2:
+                    print("Possible value of a:", a)
+                    print("Possible value of b:", b)
+                    found = True
+
+if not found:
+    print("No matching affine key was found.")
+
+print("Most frequent ciphertext letter B is assumed to represent E.")
+print("Second most frequent ciphertext letter U is assumed to represent T.")
