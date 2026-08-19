@@ -1,0 +1,35 @@
+print("ONE-TIME PAD VIGENERE CIPHER")
+print("----------------------------")
+
+plaintext = input("Enter plaintext: ").upper()
+key_input = input("Enter key numbers separated by spaces: ")
+
+keys = list(map(int, key_input.split()))
+
+letters = ""
+
+for ch in plaintext:
+    if ch.isalpha():
+        letters += ch
+
+if len(keys) != len(letters):
+    print("Number of key values must equal number of letters.")
+else:
+
+    ciphertext = ""
+
+    for i in range(len(letters)):
+        value = (ord(letters[i]) - 65 + keys[i]) % 26
+        ciphertext += chr(value + 65)
+
+    print()
+    print("Plaintext :", plaintext)
+    print("Ciphertext:", ciphertext)
+
+    decrypted = ""
+
+    for i in range(len(ciphertext)):
+        value = (ord(ciphertext[i]) - 65 - keys[i]) % 26
+        decrypted += chr(value + 65)
+
+    print("Decrypted :", decrypted)
