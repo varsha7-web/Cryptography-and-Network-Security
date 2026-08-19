@@ -1,0 +1,66 @@
+print("DES ENCRYPTION")
+print("--------------")
+
+plaintext = input("Enter 64-bit plaintext: ")
+key = input("Enter 56-bit key: ")
+
+if len(plaintext) != 64:
+    print("Plaintext must contain exactly 64 bits.")
+elif len(key) != 56:
+    print("Key must contain exactly 56 bits.")
+elif any(ch not in "01" for ch in plaintext + key):
+    print("Enter binary values only.")
+else:
+
+    left = plaintext[:32]
+    right = plaintext[32:]
+
+    subkeys = []
+
+    for i in range(16):
+        shift = (i + 1) % 56
+        if shift == 0:
+            shift = 1
+
+        rotated = key[shift:] + key[:shift]
+        subkeys.append(rotated[:32])
+
+    for round_no in range(16):
+
+        key_part = subkeys[round_no]
+
+        expanded = ""
+
+        for i in range(48):
+            expanded += right[i % 32]
+
+        mixed = ""
+
+        for i in range(48):
+            mixed += str(
+                int(expanded[i]) ^ int(key_part[i % 32])
+            )
+
+        f_result = ""
+
+        for i in range(32):
+            value = int(mixed[i]) ^ int(mixed[i + 16])
+            f_result += str(value)
+
+        new_right = ""
+
+        for i in range(32):
+            new_right += str(
+                int(left[i]) ^ int(f_result[i])
+            )
+
+        left = right
+        right = new_right
+
+    ciphertext = right + left
+
+    print()
+    print("Plaintext :", plaintext)
+    print("Ciphertext:", ciphertext)
+    print()
+    print("DES encryption completed.")
