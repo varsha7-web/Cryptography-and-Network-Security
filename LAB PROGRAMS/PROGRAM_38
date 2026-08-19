@@ -1,0 +1,56 @@
+print("HILL CIPHER KNOWN PLAINTEXT ATTACK")
+print("-----------------------------------")
+
+p1 = input("Enter first plaintext pair: ").upper()
+c1 = input("Enter first ciphertext pair: ").upper()
+
+p2 = input("Enter second plaintext pair: ").upper()
+c2 = input("Enter second ciphertext pair: ").upper()
+
+if len(p1) != 2 or len(p2) != 2 or len(c1) != 2 or len(c2) != 2:
+    print("Each value must contain exactly 2 letters.")
+else:
+
+    p11 = ord(p1[0]) - 65
+    p21 = ord(p1[1]) - 65
+
+    p12 = ord(p2[0]) - 65
+    p22 = ord(p2[1]) - 65
+
+    c11 = ord(c1[0]) - 65
+    c21 = ord(c1[1]) - 65
+
+    c12 = ord(c2[0]) - 65
+    c22 = ord(c2[1]) - 65
+
+    determinant = (p11 * p22 - p12 * p21) % 26
+
+    inverse = -1
+
+    for i in range(26):
+        if (determinant * i) % 26 == 1:
+            inverse = i
+            break
+
+    if inverse == -1:
+        print("The plaintext matrix cannot be inverted modulo 26.")
+    else:
+
+        inv11 = (p22 * inverse) % 26
+        inv12 = (-p12 * inverse) % 26
+        inv21 = (-p21 * inverse) % 26
+        inv22 = (p11 * inverse) % 26
+
+        k11 = (c11 * inv11 + c12 * inv21) % 26
+        k12 = (c11 * inv12 + c12 * inv22) % 26
+
+        k21 = (c21 * inv11 + c22 * inv21) % 26
+        k22 = (c21 * inv12 + c22 * inv22) % 26
+
+        print()
+        print("Recovered Hill Cipher Key:")
+        print(k11, k12)
+        print(k21, k22)
+
+        print()
+        print("Known plaintext attack completed.")
