@@ -1,0 +1,33 @@
+print("KEYWORD MONOALPHABETIC CIPHER")
+print("-----------------------------")
+
+keyword = input("Enter keyword: ").upper()
+plaintext = input("Enter plaintext: ").lower()
+
+alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+cipher_alphabet = ""
+
+for ch in keyword:
+    if ch.isalpha() and ch not in cipher_alphabet:
+        cipher_alphabet += ch
+
+for ch in alphabet:
+    if ch not in cipher_alphabet:
+        cipher_alphabet += ch
+
+print()
+print("Plain Alphabet : abcdefghijklmnopqrstuvwxyz")
+print("Cipher Alphabet:", cipher_alphabet.lower())
+
+ciphertext = ""
+
+for ch in plaintext:
+    if ch.isalpha():
+        position = ord(ch.upper()) - ord('A')
+        ciphertext += cipher_alphabet[position]
+    else:
+        ciphertext += ch
+
+print("Plaintext :", plaintext)
+print("Ciphertext:", ciphertext.lower())
