@@ -1,0 +1,19 @@
+import math
+
+print("PLAYFAIR CIPHER KEY ANALYSIS")
+print("----------------------------")
+
+keys = math.factorial(25)
+
+print("Total possible Playfair keys:")
+print("25! =", keys)
+
+power = math.log2(keys)
+
+print()
+print("Approximate power of 2:")
+print("2^", round(power, 2))
+
+print()
+print("Effectively unique keys:")
+print("Approximately 2^", round(power - 1, 2))
