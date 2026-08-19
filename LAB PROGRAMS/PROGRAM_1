@@ -1,0 +1,20 @@
+print("CAESAR CIPHER")
+print("-------------")
+
+plaintext = input("Enter plaintext: ")
+k = int(input("Enter key (1-25): "))
+
+ciphertext = ""
+
+for ch in plaintext:
+    if ch.isalpha():
+        if ch.isupper():
+            ciphertext += chr((ord(ch) - ord('A') + k) % 26 + ord('A'))
+        else:
+            ciphertext += chr((ord(ch) - ord('a') + k) % 26 + ord('a'))
+    else:
+        ciphertext += ch
+
+print("Plaintext :", plaintext)
+print("Key       :", k)
+print("Ciphertext:", ciphertext)
