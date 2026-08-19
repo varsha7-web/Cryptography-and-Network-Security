@@ -1,0 +1,43 @@
+print("RSA SMALL MESSAGE SPACE ATTACK")
+print("------------------------------")
+
+n = int(input("Enter RSA modulus n: "))
+e = int(input("Enter public key e: "))
+ciphertext = input("Enter ciphertext values separated by spaces: ")
+
+cipher_values = list(map(int, ciphertext.split()))
+
+print()
+print("Creating lookup table for A-Z...")
+
+lookup = {}
+
+for value in range(26):
+    encrypted = pow(value, e, n)
+    lookup[encrypted] = chr(value + 65)
+
+print()
+print("Possible Plaintext Mapping:")
+
+for value in range(26):
+    encrypted = pow(value, e, n)
+    print(chr(value + 65), "->", encrypted)
+
+print()
+print("Recovered Message:")
+
+plaintext = ""
+
+for value in cipher_values:
+    if value in lookup:
+        plaintext += lookup[value]
+    else:
+        plaintext += "?"
+
+print(plaintext)
+
+print()
+print("Conclusion:")
+print("The method is NOT secure.")
+print("The attacker can encrypt all 26 possible letters")
+print("and compare them with the ciphertext.")
