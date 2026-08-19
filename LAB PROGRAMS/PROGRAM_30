@@ -1,0 +1,62 @@
+print("CBC-MAC TWO-BLOCK FORGERY")
+print("-------------------------")
+
+x = input("Enter one-block message X in binary: ")
+key = input("Enter binary key: ")
+
+if len(x) != len(key):
+    print("Message and key must have the same length.")
+elif any(ch not in "01" for ch in x + key):
+    print("Enter binary values only.")
+else:
+
+    def xor_bits(a, b):
+        result = ""
+
+        for i in range(len(a)):
+            if a[i] == b[i]:
+                result += "0"
+            else:
+                result += "1"
+
+        return result
+
+    def encrypt(block):
+        return xor_bits(block, key)
+
+    initial = "0" * len(x)
+
+    first_input = xor_bits(x, initial)
+    tag = encrypt(first_input)
+
+    print()
+    print("Message X:", x)
+    print("CBC-MAC T:", tag)
+
+    second_block = xor_bits(x, tag)
+
+    print()
+    print("X XOR T:", second_block)
+
+    print()
+    print("Two-block message:")
+    print(x, "||", second_block)
+
+    first_cipher = encrypt(x)
+
+    second_input = xor_bits(second_block, first_cipher)
+
+    second_cipher = encrypt(second_input)
+
+    forged_tag = second_cipher
+
+    print()
+    print("CBC-MAC of two-block message:", forged_tag)
+
+    if forged_tag == tag:
+        print()
+        print("Forgery successful.")
+        print("The two-block message has the same MAC tag as X.")
+    else:
+        print()
+        print("Forgery failed.")
