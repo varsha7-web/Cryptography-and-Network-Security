@@ -1,0 +1,25 @@
+print("DES DECRYPTION KEY ORDER")
+print("------------------------")
+
+keys = []
+
+print("Enter 16 encryption keys:")
+
+for i in range(16):
+    key = input("K" + str(i + 1) + ": ")
+    keys.append(key)
+
+print()
+print("Encryption Key Order:")
+
+for i in range(16):
+    print(keys[i], end=" ")
+
+print()
+print()
+print("Decryption Key Order:")
+
+for i in range(15, -1, -1):
+    print(keys[i], end=" ")
+
+print()
