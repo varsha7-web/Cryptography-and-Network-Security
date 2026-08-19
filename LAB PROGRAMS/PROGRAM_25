@@ -1,0 +1,40 @@
+import math
+
+print("RSA COMMON FACTOR ATTACK")
+print("------------------------")
+
+n = int(input("Enter RSA modulus n: "))
+e = int(input("Enter public key e: "))
+m = int(input("Enter plaintext block: "))
+
+print()
+print("RSA Public Key:")
+print("n =", n)
+print("e =", e)
+
+print()
+print("Plaintext block M =", m)
+
+common_factor = math.gcd(m, n)
+
+print()
+print("gcd(M, n) =", common_factor)
+
+if common_factor == 1:
+    print("M and n are relatively prime.")
+    print("The common-factor attack does not reveal a factor of n.")
+else:
+    print("A common factor has been found.")
+    print("Factor of n =", common_factor)
+
+    other_factor = n // common_factor
+
+    print("Other factor of n =", other_factor)
+
+    phi = (common_factor - 1) * (other_factor - 1)
+
+    print("Phi(n) =", phi)
+
+    print()
+    print("The RSA modulus has been factored.")
+    print("This compromises the RSA private key.")
