@@ -1,0 +1,28 @@
+print("MONOALPHABETIC SUBSTITUTION CIPHER")
+print("----------------------------------")
+
+plaintext = input("Enter plaintext: ")
+key = input("Enter 26-letter substitution key: ").upper()
+
+alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+if len(key) != 26 or len(set(key)) != 26 or not key.isalpha():
+    print("Invalid key!")
+    print("The key must contain 26 unique letters.")
+else:
+    ciphertext = ""
+
+    for ch in plaintext:
+        if ch.isalpha():
+            if ch.isupper():
+                position = ord(ch) - ord('A')
+                ciphertext += key[position]
+            else:
+                position = ord(ch.upper()) - ord('A')
+                ciphertext += key[position].lower()
+        else:
+            ciphertext += ch
+
+    print("Plaintext :", plaintext)
+    print("Key       :", key)
+    print("Ciphertext:", ciphertext)
