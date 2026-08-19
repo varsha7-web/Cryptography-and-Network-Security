@@ -1,0 +1,41 @@
+print("CMAC SUBKEY GENERATION")
+print("----------------------")
+
+block_size = int(input("Enter block size (64 or 128): "))
+key = int(input("Enter hexadecimal key: "), 16)
+
+if block_size == 64:
+    rb = 0x1B
+elif block_size == 128:
+    rb = 0x87
+else:
+    print("Invalid block size.")
+    exit()
+
+mask = (1 << block_size) - 1
+
+print()
+print("Block Size:", block_size)
+print("Rb =", hex(rb))
+
+l_value = key & mask
+
+print("L =", format(l_value, "0" + str(block_size // 4) + "X"))
+
+msb = (l_value >> (block_size - 1)) & 1
+
+k1 = (l_value << 1) & mask
+
+if msb == 1:
+    k1 ^= rb
+
+msb = (k1 >> (block_size - 1)) & 1
+
+k2 = (k1 << 1) & mask
+
+if msb == 1:
+    k2 ^= rb
+
+print()
+print("Subkey K1 =", format(k1, "0" + str(block_size // 4) + "X"))
+print("Subkey K2 =", format(k2, "0" + str(block_size // 4) + "X"))
