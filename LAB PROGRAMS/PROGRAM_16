@@ -1,0 +1,40 @@
+print("MONOALPHABETIC FREQUENCY ATTACK")
+print("--------------------------------")
+
+ciphertext = input("Enter ciphertext: ").upper()
+top = int(input("Enter number of possible plaintexts: "))
+
+frequency = {}
+
+for ch in ciphertext:
+    if ch.isalpha():
+        frequency[ch] = frequency.get(ch, 0) + 1
+
+sorted_letters = sorted(frequency, key=frequency.get, reverse=True)
+
+print()
+print("Letter Frequencies:")
+
+for ch in sorted_letters:
+    print(ch, ":", frequency[ch])
+
+english = "ETAOINSHRDLCUMWFGYPBVKJXQZ"
+
+print()
+print("Possible Plaintexts:")
+
+for k in range(min(top, 26)):
+    mapping = {}
+
+    for i in range(len(sorted_letters)):
+        mapping[sorted_letters[i]] = english[(i + k) % 26]
+
+    plaintext = ""
+
+    for ch in ciphertext:
+        if ch in mapping:
+            plaintext += mapping[ch]
+        else:
+            plaintext += ch
+
+    print(str(k + 1) + ".", plaintext)
