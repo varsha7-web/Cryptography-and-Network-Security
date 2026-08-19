@@ -1,0 +1,76 @@
+print("HILL CIPHER")
+print("-----------")
+
+key = [
+    [9, 4],
+    [5, 7]
+]
+
+plaintext = input("Enter plaintext: ").upper()
+
+text = ""
+
+for ch in plaintext:
+    if ch.isalpha():
+        text += ch
+
+if len(text) % 2 != 0:
+    text += "X"
+
+ciphertext = ""
+
+for i in range(0, len(text), 2):
+    p1 = ord(text[i]) - ord('A')
+    p2 = ord(text[i + 1]) - ord('A')
+
+    c1 = (9 * p1 + 4 * p2) % 26
+    c2 = (5 * p1 + 7 * p2) % 26
+
+    ciphertext += chr(c1 + ord('A'))
+    ciphertext += chr(c2 + ord('A'))
+
+print()
+print("Plaintext :", text)
+print("Key Matrix:")
+print(key[0])
+print(key[1])
+print("Ciphertext:", ciphertext)
+
+det = (9 * 7 - 4 * 5) % 26
+
+inverse_det = 0
+
+for i in range(26):
+    if (det * i) % 26 == 1:
+        inverse_det = i
+        break
+
+print()
+print("Determinant =", det)
+print("Inverse of determinant =", inverse_det)
+
+inverse_key = [
+    [(7 * inverse_det) % 26, (-4 * inverse_det) % 26],
+    [(-5 * inverse_det) % 26, (9 * inverse_det) % 26]
+]
+
+print("Inverse Key Matrix:")
+print(inverse_key[0])
+print(inverse_key[1])
+
+decrypted = ""
+
+for i in range(0, len(ciphertext), 2):
+    c1 = ord(ciphertext[i]) - ord('A')
+    c2 = ord(ciphertext[i + 1]) - ord('A')
+
+    p1 = (inverse_key[0][0] * c1 +
+          inverse_key[0][1] * c2) % 26
+
+    p2 = (inverse_key[1][0] * c1 +
+          inverse_key[1][1] * c2) % 26
+
+    decrypted += chr(p1 + ord('A'))
+    decrypted += chr(p2 + ord('A'))
+
+print("Decrypted Text:", decrypted)
