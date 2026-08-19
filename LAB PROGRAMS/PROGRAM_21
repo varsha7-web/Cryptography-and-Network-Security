@@ -1,0 +1,100 @@
+print("ECB, CBC AND CFB MODES")
+print("----------------------")
+
+plaintext = input("Enter binary plaintext: ")
+block_size = int(input("Enter block size: "))
+
+if len(plaintext) == 0:
+    print("Plaintext cannot be empty.")
+elif any(ch not in "01" for ch in plaintext):
+    print("Enter binary plaintext only.")
+else:
+    original_length = len(plaintext)
+
+    padding = block_size - (len(plaintext) % block_size)
+
+    if padding == 0:
+        padding = block_size
+
+    plaintext = plaintext + "1"
+
+    while len(plaintext) % block_size != 0:
+        plaintext += "0"
+
+    print()
+    print("Original length:", original_length)
+    print("Padding bits added:", len(plaintext) - original_length)
+    print("Padded plaintext:", plaintext)
+
+    blocks = []
+
+    for i in range(0, len(plaintext), block_size):
+        blocks.append(plaintext[i:i + block_size])
+
+    key = input("Enter binary key of block size: ")
+
+    if len(key) != block_size or any(ch not in "01" for ch in key):
+        print("Invalid key.")
+    else:
+        iv = input("Enter binary IV of block size: ")
+
+        if len(iv) != block_size or any(ch not in "01" for ch in iv):
+            print("Invalid IV.")
+        else:
+            def xor_bits(a, b):
+                result = ""
+
+                for i in range(len(a)):
+                    if a[i] == b[i]:
+                        result += "0"
+                    else:
+                        result += "1"
+
+                return result
+
+            ecb = []
+
+            for block in blocks:
+                ecb.append(xor_bits(block, key))
+
+            print()
+            print("ECB Ciphertext:")
+
+            for block in ecb:
+                print(block)
+
+            cbc = []
+            previous = iv
+
+            for block in blocks:
+                mixed = xor_bits(block, previous)
+                encrypted = xor_bits(mixed, key)
+                cbc.append(encrypted)
+                previous = encrypted
+
+            print()
+            print("CBC Ciphertext:")
+
+            for block in cbc:
+                print(block)
+
+            cfb = []
+            previous = iv
+
+            for block in blocks:
+                encrypted_iv = xor_bits(previous, key)
+                cipher_block = xor_bits(block, encrypted_iv)
+                cfb.append(cipher_block)
+                previous = cipher_block
+
+            print()
+            print("CFB Ciphertext:")
+
+            for block in cfb:
+                print(block)
+
+            print()
+            print("Motivation for padding:")
+            print("Padding ensures that every message has a complete final block.")
+            print("Adding padding even when the message is already complete")
+            print("also makes the original message length unambiguous.")
