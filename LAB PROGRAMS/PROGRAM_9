@@ -1,0 +1,59 @@
+print("PLAYFAIR CIPHER - PT-109")
+print("------------------------")
+
+key = "ROYAL"
+ciphertext = "KXJEY UREBE ZWEHE WRYTU HEYFS KREHE GOYFI WTTTU OLKSY CAJPO BOTEI ZONTX BYBNT GONEY CUZWR GDSON SXBOU YWRHE BAAHY USEDQ"
+
+key = key.upper().replace("J", "I")
+
+matrix_text = ""
+
+for ch in key + "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+    if ch == "J":
+        ch = "I"
+
+    if ch not in matrix_text:
+        matrix_text += ch
+
+matrix = []
+
+for i in range(0, 25, 5):
+    matrix.append(matrix_text[i:i + 5])
+
+print("Playfair Matrix:")
+
+for row in matrix:
+    print(" ".join(row))
+
+def position(ch):
+    for r in range(5):
+        for c in range(5):
+            if matrix[r][c] == ch:
+                return r, c
+
+ciphertext = ciphertext.replace(" ", "").upper()
+
+plaintext = ""
+
+for i in range(0, len(ciphertext), 2):
+    a = ciphertext[i]
+    b = ciphertext[i + 1]
+
+    r1, c1 = position(a)
+    r2, c2 = position(b)
+
+    if r1 == r2:
+        plaintext += matrix[r1][(c1 - 1) % 5]
+        plaintext += matrix[r2][(c2 - 1) % 5]
+
+    elif c1 == c2:
+        plaintext += matrix[(r1 - 1) % 5][c1]
+        plaintext += matrix[(r2 - 1) % 5][c2]
+
+    else:
+        plaintext += matrix[r1][c2]
+        plaintext += matrix[r2][c1]
+
+print()
+print("Ciphertext:", ciphertext)
+print("Decrypted Text:", plaintext)
