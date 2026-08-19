@@ -1,0 +1,51 @@
+print("DSA SIGNATURE RANDOMNESS")
+print("------------------------")
+
+message = input("Enter message: ")
+private_key = int(input("Enter private key: "))
+q = int(input("Enter q: "))
+
+k1 = int(input("Enter random k for first signature: "))
+k2 = int(input("Enter random k for second signature: "))
+
+if k1 % q == 0 or k2 % q == 0:
+    print("k must not be divisible by q.")
+else:
+
+    def hash_message(text):
+        total = 0
+
+        for ch in text:
+            total += ord(ch)
+
+        return total % q
+
+    h = hash_message(message)
+
+    r1 = pow(2, k1, q)
+    s1 = ((h + private_key * r1) * pow(k1, -1, q)) % q
+
+    r2 = pow(2, k2, q)
+    s2 = ((h + private_key * r2) * pow(k2, -1, q)) % q
+
+    print()
+    print("Message:", message)
+    print("Message hash:", h)
+
+    print()
+    print("First Signature:")
+    print("r =", r1)
+    print("s =", s1)
+
+    print()
+    print("Second Signature:")
+    print("r =", r2)
+    print("s =", s2)
+
+    if (r1, s1) != (r2, s2):
+        print()
+        print("The signatures are different.")
+        print("This happens because different random k values were used.")
+    else:
+        print()
+        print("The signatures are identical.")
