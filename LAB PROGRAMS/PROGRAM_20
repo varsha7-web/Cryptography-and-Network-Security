@@ -1,0 +1,66 @@
+print("ECB AND CBC ERROR PROPAGATION")
+print("-----------------------------")
+
+p1 = input("Enter Plaintext Block P1: ")
+p2 = input("Enter Plaintext Block P2: ")
+
+print()
+print("Choose Mode")
+print("1. ECB")
+print("2. CBC")
+
+choice = int(input("Enter choice: "))
+
+if choice == 1:
+
+    print()
+    print("ECB MODE")
+
+    c1 = p1
+    c2 = p2
+
+    print("Original C1:", c1)
+    print("Original C2:", c2)
+
+    if len(c1) > 0:
+        first = c1[0]
+
+        if first.isalpha():
+            changed = "A" if first != "A" else "B"
+            c1 = changed + c1[1:]
+        else:
+            c1 = "X" + c1[1:]
+
+    print("Erroneous C1:", c1)
+
+    print()
+    print("Affected plaintext block: P1")
+    print("P2 remains unaffected.")
+
+    print()
+    print("Answer:")
+    print("a) No blocks beyond P1 are affected.")
+    print("b) A bit error in P1 affects only the corresponding ciphertext block C1.")
+
+elif choice == 2:
+
+    print()
+    print("CBC MODE")
+
+    print("A transmission error is introduced in C1.")
+
+    print()
+    print("Affected plaintext blocks:")
+    print("P1 -> Completely corrupted")
+    print("P2 -> One-bit error at the corresponding position")
+    print("P3 and later -> Unaffected")
+
+    print()
+    print("Answer:")
+    print("a) No blocks beyond P2 are affected.")
+    print("b) A bit error in source P1 propagates through the ciphertext")
+    print("   because C1 is changed. At the receiver, P1 is corrupted,")
+    print("   while P2 contains a corresponding bit error.")
+
+else:
+    print("Invalid choice.")
