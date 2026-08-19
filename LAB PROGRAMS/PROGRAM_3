@@ -1,0 +1,87 @@
+print("PLAYFAIR CIPHER")
+print("---------------")
+
+key = input("Enter keyword: ").upper()
+plaintext = input("Enter plaintext: ").upper()
+
+# Create 5x5 matrix
+key = key.replace("J", "I")
+matrix_text = ""
+
+for ch in key + "ABCDEFGHIJKLMNOPQRSTUVWXYZ":
+    if ch == "J":
+        ch = "I"
+
+    if ch not in matrix_text and ch.isalpha():
+        matrix_text += ch
+
+matrix = []
+
+for i in range(0, 25, 5):
+    matrix.append(matrix_text[i:i+5])
+
+print("\nPlayfair Matrix:")
+
+for row in matrix:
+    print(" ".join(row))
+
+# Prepare plaintext
+text = ""
+
+for ch in plaintext:
+    if ch.isalpha():
+        if ch == "J":
+            ch = "I"
+        text += ch
+
+prepared = ""
+i = 0
+
+while i < len(text):
+    a = text[i]
+
+    if i + 1 < len(text):
+        b = text[i + 1]
+
+        if a == b:
+            prepared += a + "X"
+            i += 1
+        else:
+            prepared += a + b
+            i += 2
+    else:
+        prepared += a + "X"
+        i += 1
+
+# Find position of a character
+def position(ch):
+    for r in range(5):
+        for c in range(5):
+            if matrix[r][c] == ch:
+                return r, c
+
+# Encrypt
+ciphertext = ""
+
+for i in range(0, len(prepared), 2):
+
+    a = prepared[i]
+    b = prepared[i + 1]
+
+    r1, c1 = position(a)
+    r2, c2 = position(b)
+
+    if r1 == r2:
+        ciphertext += matrix[r1][(c1 + 1) % 5]
+        ciphertext += matrix[r2][(c2 + 1) % 5]
+
+    elif c1 == c2:
+        ciphertext += matrix[(r1 + 1) % 5][c1]
+        ciphertext += matrix[(r2 + 1) % 5][c2]
+
+    else:
+        ciphertext += matrix[r1][c2]
+        ciphertext += matrix[r2][c1]
+
+print("\nPrepared Plaintext:", prepared)
+print("Ciphertext:", ciphertext)
