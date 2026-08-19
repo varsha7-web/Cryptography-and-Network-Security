@@ -1,0 +1,71 @@
+print("CBC ENCRYPTION AND DECRYPTION")
+print("-----------------------------")
+
+plaintext = input("Enter binary plaintext: ")
+key = input("Enter binary key: ")
+iv = input("Enter binary IV: ")
+
+if any(ch not in "01" for ch in plaintext + key + iv):
+    print("Enter binary values only.")
+elif len(key) != 8 or len(iv) != 8:
+    print("Key and IV must contain 8 bits.")
+elif len(plaintext) % 8 != 0:
+    print("Plaintext length must be a multiple of 8 bits.")
+else:
+
+    def xor_bits(a, b):
+        result = ""
+
+        for i in range(len(a)):
+            if a[i] == b[i]:
+                result += "0"
+            else:
+                result += "1"
+
+        return result
+
+    def encrypt_block(block):
+        return xor_bits(block, key)
+
+    def decrypt_block(block):
+        return xor_bits(block, key)
+
+    blocks = []
+
+    for i in range(0, len(plaintext), 8):
+        blocks.append(plaintext[i:i + 8])
+
+    ciphertext = []
+    previous = iv
+
+    for block in blocks:
+        mixed = xor_bits(block, previous)
+        encrypted = encrypt_block(mixed)
+
+        ciphertext.append(encrypted)
+        previous = encrypted
+
+    print()
+    print("Plaintext:", plaintext)
+    print("Ciphertext:")
+
+    for block in ciphertext:
+        print(block)
+
+    decrypted = ""
+    previous = iv
+
+    for block in ciphertext:
+        decrypted_block = decrypt_block(block)
+        original = xor_bits(decrypted_block, previous)
+
+        decrypted += original
+        previous = block
+
+    print()
+    print("Decrypted Plaintext:", decrypted)
+
+    if decrypted == plaintext:
+        print("Decryption successful.")
+    else:
+        print("Decryption failed.")
