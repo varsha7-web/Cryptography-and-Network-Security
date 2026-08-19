@@ -1,0 +1,42 @@
+print("ADDITIVE CIPHER FREQUENCY ATTACK")
+print("--------------------------------")
+
+ciphertext = input("Enter ciphertext: ").upper()
+top = int(input("Enter number of possible plaintexts: "))
+
+english_frequency = "ETAOINSHRDLCUMWFGYPBVKJXQZ"
+
+scores = []
+
+for key in range(26):
+
+    plaintext = ""
+
+    for ch in ciphertext:
+        if ch.isalpha():
+            value = (ord(ch) - 65 - key) % 26
+            plaintext += chr(value + 65)
+        else:
+            plaintext += ch
+
+    score = 0
+
+    for i in range(len(plaintext)):
+        if plaintext[i] in english_frequency[:10]:
+            score += 1
+
+    scores.append((score, key, plaintext))
+
+scores.sort(reverse=True)
+
+print()
+print("Top Possible Plaintexts:")
+
+for i in range(min(top, 26)):
+    score, key, plaintext = scores[i]
+
+    print(
+        str(i + 1) + ".",
+        "Key =", key,
+        "Plaintext =", plaintext
+    )
