@@ -1,0 +1,48 @@
+print("RSA PRIVATE KEY GENERATION")
+print("--------------------------")
+
+n = 3599
+e = 31
+
+p = 0
+q = 0
+
+for i in range(2, n):
+    if n % i == 0:
+        p = i
+        q = n // i
+        break
+
+print("Public key e:", e)
+print("Public key n:", n)
+
+print()
+print("p =", p)
+print("q =", q)
+
+phi = (p - 1) * (q - 1)
+
+print("Phi(n) =", phi)
+
+def extended_gcd(a, b):
+
+    if b == 0:
+        return a, 1, 0
+
+    gcd, x1, y1 = extended_gcd(b, a % b)
+
+    x = y1
+    y = x1 - (a // b) * y1
+
+    return gcd, x, y
+
+gcd, x, y = extended_gcd(e, phi)
+
+if gcd != 1:
+    print("Private key does not exist.")
+else:
+    d = x % phi
+
+    print("Private key d:", d)
+    print()
+    print("RSA Private Key =", d)
