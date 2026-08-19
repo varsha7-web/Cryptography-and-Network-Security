@@ -1,0 +1,70 @@
+print("MONOALPHABETIC SUBSTITUTION ATTACK")
+print("----------------------------------")
+
+ciphertext = input("Enter ciphertext: ").upper()
+top = int(input("Enter number of possible plaintexts: "))
+
+frequency = {}
+
+for ch in ciphertext:
+    if ch.isalpha():
+        frequency[ch] = frequency.get(ch, 0) + 1
+
+ordered = sorted(
+    frequency,
+    key=frequency.get,
+    reverse=True
+)
+
+english = "ETAOINSHRDLCUMWFGYPBVKJXQZ"
+
+results = []
+
+for shift in range(26):
+
+    mapping = {}
+
+    for i in range(len(ordered)):
+        mapping[ordered[i]] = english[(i + shift) % 26]
+
+    plaintext = ""
+
+    for ch in ciphertext:
+        if ch in mapping:
+            plaintext += mapping[ch]
+        else:
+            plaintext += ch
+
+    score = 0
+
+    common_words = [
+        "THE",
+        "AND",
+        "THIS",
+        "THAT",
+        "IS",
+        "OF",
+        "TO",
+        "IN"
+    ]
+
+    for word in common_words:
+        if word in plaintext:
+            score += 10
+
+    for ch in plaintext:
+        if ch in "ETAOIN":
+            score += 1
+
+    results.append((score, plaintext))
+
+results.sort(reverse=True)
+
+print()
+print("Top Possible Plaintexts:")
+
+for i in range(min(top, len(results))):
+    print(
+        str(i + 1) + ".",
+        results[i][1]
+    )
