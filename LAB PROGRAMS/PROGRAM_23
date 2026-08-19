@@ -1,0 +1,79 @@
+print("COUNTER MODE ENCRYPTION AND DECRYPTION")
+print("--------------------------------------")
+
+plaintext = input("Enter binary plaintext: ")
+key = input("Enter binary key: ")
+counter = input("Enter starting counter: ")
+
+if any(ch not in "01" for ch in plaintext + key + counter):
+    print("Enter binary values only.")
+elif len(key) != 8 or len(counter) != 8:
+    print("Key and counter must contain 8 bits.")
+elif len(plaintext) % 8 != 0:
+    print("Plaintext length must be a multiple of 8 bits.")
+else:
+
+    def xor_bits(a, b):
+        result = ""
+
+        for i in range(len(a)):
+            if a[i] == b[i]:
+                result += "0"
+            else:
+                result += "1"
+
+        return result
+
+    def encrypt_block(block):
+        return xor_bits(block, key)
+
+    blocks = []
+
+    for i in range(0, len(plaintext), 8):
+        blocks.append(plaintext[i:i + 8])
+
+    counter_value = int(counter, 2)
+    ciphertext = ""
+
+    print()
+    print("Encryption Process:")
+
+    for block in blocks:
+
+        counter_bits = format(counter_value % 256, "08b")
+        keystream = encrypt_block(counter_bits)
+
+        cipher_block = xor_bits(block, keystream)
+
+        ciphertext += cipher_block
+
+        print("Counter  :", counter_bits)
+        print("Keystream:", keystream)
+        print("Plaintext:", block)
+        print("Ciphertext:", cipher_block)
+        print()
+
+        counter_value += 1
+
+    print("Final Ciphertext:", ciphertext)
+
+    counter_value = int(counter, 2)
+    decrypted = ""
+
+    for i in range(0, len(ciphertext), 8):
+
+        block = ciphertext[i:i + 8]
+
+        counter_bits = format(counter_value % 256, "08b")
+        keystream = encrypt_block(counter_bits)
+
+        plain_block = xor_bits(block, keystream)
+
+        decrypted += plain_block
+
+        counter_value += 1
+
+    print("Decrypted Plaintext:", decrypted)
+
+    if decrypted == plaintext:
+        print("Decryption successful.")
