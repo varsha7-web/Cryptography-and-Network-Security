@@ -1,0 +1,37 @@
+print("DIFFIE-HELLMAN KEY EXCHANGE")
+print("---------------------------")
+
+q = int(input("Enter public prime q: "))
+a = int(input("Enter public base a: "))
+
+alice_secret = int(input("Enter Alice's secret number: "))
+bob_secret = int(input("Enter Bob's secret number: "))
+
+alice_public = pow(a, alice_secret, q)
+bob_public = pow(a, bob_secret, q)
+
+print()
+print("Alice sends:", alice_public)
+print("Bob sends  :", bob_public)
+
+alice_key = pow(bob_public, alice_secret, q)
+bob_key = pow(alice_public, bob_secret, q)
+
+print()
+print("Alice's shared key:", alice_key)
+print("Bob's shared key  :", bob_key)
+
+if alice_key == bob_key:
+    print()
+    print("Key exchange successful.")
+    print("Both participants obtained the same shared key.")
+else:
+    print()
+    print("Key exchange failed.")
+
+print()
+print("If Alice and Bob send x^a instead of a^x,")
+print("the exchanged values do not provide the normal")
+print("Diffie-Hellman shared-secret property.")
+print("An attacker may be able to determine the secret")
+print("values much more easily.")
